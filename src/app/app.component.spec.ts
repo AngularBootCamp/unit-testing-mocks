@@ -7,16 +7,17 @@ import { HelloService } from './hello.service';
  * Testing a component class without the DOM (same as a service test)
  */
 describe('App Component', () => {
-
   let appComponent: AppComponent;
   let helloService: SpyObj<HelloService>;
 
   beforeEach(() => {
-    helloService = jasmine.createSpyObj<HelloService>('HelloService', ['calculateHello']);
+    helloService = jasmine.createSpyObj<HelloService>(
+      'HelloService',
+      ['calculateHello']
+    );
   });
 
   it('should calculate greeting during initialization', () => {
-
     // setup and preconditions
     helloService.calculateHello.and.returnValue('Hello, Joe!');
 
