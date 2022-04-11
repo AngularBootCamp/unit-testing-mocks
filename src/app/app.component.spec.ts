@@ -1,4 +1,4 @@
-import SpyObj = jasmine.SpyObj;
+import { createSpyObj } from 'jest-createspyobj';
 
 import { AppComponent } from './app.component';
 import { HelloService } from './hello.service';
@@ -8,18 +8,15 @@ import { HelloService } from './hello.service';
  */
 describe('App Component', () => {
   let appComponent: AppComponent;
-  let helloService: SpyObj<HelloService>;
+  let helloService: jest.Mocked<HelloService>;
 
   beforeEach(() => {
-    helloService = jasmine.createSpyObj<HelloService>(
-      'HelloService',
-      ['calculateHello']
-    );
+    helloService = createSpyObj(HelloService);
   });
 
   it('should calculate greeting during initialization', () => {
     // setup and preconditions
-    helloService.calculateHello.and.returnValue('Hello, Joe!');
+    helloService.calculateHello.mockReturnValue('Hello, Joe!');
 
     appComponent = new AppComponent(helloService);
 

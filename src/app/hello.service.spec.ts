@@ -1,17 +1,15 @@
-import SpyObj = jasmine.SpyObj;
+import { createSpyObj } from 'jest-createspyobj';
 
 import { HelloService } from './hello.service';
 import { UserService } from './user.service';
 
 describe('HelloUserService', () => {
   let helloService: HelloService;
-  let userService: SpyObj<UserService>;
+  let userService: jest.Mocked<UserService>;
 
   beforeEach(() => {
     // mock dependencies
-    userService = jasmine.createSpyObj<UserService>('UserService', [
-      'currentUser'
-    ]);
+    userService = createSpyObj(UserService);
 
     // manually inject mocks into service under test
     helloService = new HelloService(userService);
@@ -24,7 +22,7 @@ describe('HelloUserService', () => {
       firstName: 'Jack',
       lastName: 'Baur'
     };
-    userService.currentUser.and.returnValue(user);
+    userService.currentUser.mockReturnValue(user);
 
     // execute test method and assert result
     expect(helloService.calculateHello('Hello')).toEqual(
@@ -33,11 +31,9 @@ describe('HelloUserService', () => {
 
     // various options for verifying mocks
     expect(userService.currentUser).toHaveBeenCalled();
-    expect(userService.currentUser.calls.count()).toEqual(1);
+    expect(userService.currentUser).toHaveBeenCalledTimes(1);
     // Unneeded in this case, but shows API options
     // More helpful if your spy is calling through to a real function
-    expect(
-      userService.currentUser.calls.mostRecent().returnValue
-    ).toBe(user);
+    expect(userService.currentUser.mock.results[0].value).toBe(user);
   });
 });
