@@ -1,15 +1,15 @@
-import { createSpyObj } from 'jest-createspyobj';
+import { Spy, createSpyFromClass } from 'jest-auto-spies';
 
 import { HelloService } from './hello.service';
 import { UserService } from './user.service';
 
 describe('HelloUserService', () => {
   let helloService: HelloService;
-  let userService: jest.Mocked<UserService>;
+  let userService: Spy<UserService>;
 
   beforeEach(() => {
     // mock dependencies
-    userService = createSpyObj(UserService);
+    userService = createSpyFromClass(UserService);
 
     // manually inject mocks into service under test
     helloService = new HelloService(userService);
